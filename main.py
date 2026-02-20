@@ -13,7 +13,7 @@ from config.database import client
 from routes.route_routes import router as route_router
 from routes.truck_routes import router as truck_router
 from routes.material_routes import router as material_router
-from routes.driver_routes import router as driver_router
+from routes.employee_routes import router as driver_router
 from routes.landfill_routes import router as landfill_router
 
 from routes.coversheet_routes import router as coversheet_router
@@ -30,25 +30,23 @@ async def lifespan(application: FastAPI):
     await ping_database()
     yield
     
-
 app = FastAPI(lifespan=lifespan)
-
-
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    response = await call_next(request)
-    print("Hola desde el middleware")
-    return response
 
 # Incluimos los orígenes permitidos en la configuración de CORS
 # Si quiere permitir todos los orígenes, puedes usar unicamente ["*"]
 origins = [
     "https://coversheet-app.onrender.com",
+    "https://coversheet.kizunadata.cloud",
     "http://www.render.com",
     "https://www.acedisposal.com",
     "http://localhost",
     "http://localhost:8080",
-    "http://localhost:5173"
+    "http://127.0.0.1:8080",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3500",  # <--- AGREGA ESTE (El que sale en tu error)
+    "http://127.0.0.1:3500",  # <--- AGREGA ESTE por seguridad
+    "http://[::1]:5173",      # <--- IPv6 de Windows para el frontend
 ]
 
 app.add_middleware(
@@ -58,6 +56,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    response = await call_next(request)
+    print("Hola desde el middleware")
+    return response
+
 
 # Sirve archivos estáticos desde la carpeta 'uploads'
 if not os.path.exists("uploads"):

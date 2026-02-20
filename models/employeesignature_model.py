@@ -5,21 +5,13 @@ from datetime import datetime
 from bson import ObjectId
 
 
-class IncidentDetailModel(BaseModel):
+class IncidentDetailsModel(BaseModel):
     
     # ✅ INCIDENT DETAILS
     
-    incidentDescription: Optional[str] = None
-    actionEventCondition: Optional[str] = None
-    wereAnyVehiclesTowed: Optional[bool] = None
-    wasAnyOneHurt: Optional[bool] = None
-    describeAnyInjuries: Optional[str] = None
-    damageToAceTruck: Optional[str] = None
-    whatDamageWasDone: Optional[str] = None
-    incidentInThePastYear: Optional[bool] = None
-    listDatesOfIncidents: Optional[str] = None
-    
-    
+    employeeSignature: Optional[str] = None
+    date: Optional[str] = None
+   
     # 🆕 referencia al padre
     generalInformation_ref_id: Optional[str] = None
     
